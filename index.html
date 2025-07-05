@@ -2,99 +2,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pak Oil Investment</title>
+    <title>Pak Oil Investment - Demo</title>
     <style>
-        body {font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0;}
-        header, footer {background-color: #333; color: #fff; text-align: center; padding: 20px;}
-        .container {padding: 20px; max-width: 1000px; margin: auto;}
-        .section {background-color: #fff; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);}
-        .plan {padding: 20px; margin-bottom: 20px; border-radius: 8px; color: #fff;}
-        .basic {background-color: #28a745;}
-        .silver {background-color: #007bff;}
-        .gold {background-color: #fd7e14;}
-        .referral {background-color: #6f42c1; text-align: center; padding: 15px;}
-        .actions {display: flex; justify-content: space-around; margin-bottom: 20px;}
-        .deposit {background-color: #28a745; padding: 15px; border-radius: 8px; color: #fff;}
-        .withdraw {background-color: #dc3545; padding: 15px; border-radius: 8px; color: #fff;}
-        button {padding: 10px 20px; margin-top: 10px; border: none; border-radius: 4px; cursor: pointer; background-color: #fff; color: #000;}
-        input {padding: 10px; width: 100%; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px;}
-        .balance, .profit {font-size: 18px; margin-bottom: 10px;}
+        body {font-family: Arial, sans-serif; background-color: #f8f8f8; padding: 20px;}
+        .section {background-color: #fff; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.1);}
+        .btn {padding: 10px 15px; background-color: #007bff; color: #fff; border: none; border-radius: 4px; cursor: pointer; margin-top: 10px;}
+        .deposit {background-color: #28a745; color: #fff; margin-right: 10px;}
+        .withdraw {background-color: #dc3545; color: #fff;}
+        .plan {margin-top: 15px;}
+        input {padding: 8px; width: 100%; margin-bottom: 10px;}
     </style>
 </head>
-<body><header>
-    <h1>Pak Oil Investment</h1>
-</header><div class="container"><div class="balance">💰 Balance: <span id="balance">0</span> PKR</div>
-<div class="profit">📈 Daily Profit: <span id="profit">0</span> PKR</div><div class="actions">
-    <div class="deposit">
-        <h3>Deposit</h3>
-        <input type="text" id="promoCode" placeholder="Enter Code">
-        <button onclick="applyCode()">Apply Code</button>
-    </div>
-    <div class="withdraw">
-        <h3>Withdraw</h3>
-        <p>Contact Admin on WhatsApp to withdraw your funds.</p>
-        <p>WhatsApp: 0316-5355105</p>
-    </div>
-</div><div class="plan basic">
+<body><h1>Pak Oil Investment</h1><div class="section">
+    <p><strong>💰 Balance:</strong> <span id="balance">0</span> PKR</p>
+    <p><strong>📈 Daily Profit:</strong> <span id="profit">0</span> PKR</p><div>
+    <button class="btn deposit" onclick="showDeposit()">Deposit</button>
+    <button class="btn withdraw" onclick="showWithdraw()">Withdraw</button>
+</div>
+
+</div><div class="section plan">
     <h3>Basic Plan (500 PKR)</h3>
     <p>Daily Profit: 220 PKR</p>
     <p>Total in 10 Days: 2200 PKR</p>
-    <button id="basicBtn" onclick="buyPlan('basic', 500, 220)">Buy Basic Plan</button>
-</div><div class="plan silver">
+    <button class="btn" onclick="buyPlan(500, 220)">Buy Basic Plan</button>
+</div><div class="section plan">
     <h3>Silver Plan (1000 PKR)</h3>
     <p>Daily Profit: 450 PKR</p>
     <p>Total in 10 Days: 4500 PKR</p>
-    <button id="silverBtn" onclick="buyPlan('silver', 1000, 450)">Buy Silver Plan</button>
-</div><div class="plan gold">
+    <button class="btn" onclick="buyPlan(1000, 450)">Buy Silver Plan</button>
+</div><div class="section plan">
     <h3>Gold Plan (2000 PKR)</h3>
     <p>Daily Profit: 900 PKR</p>
     <p>Total in 10 Days: 9000 PKR</p>
-    <button id="goldBtn" onclick="buyPlan('gold', 2000, 900)">Buy Gold Plan</button>
-</div><div class="referral">
+    <button class="btn" onclick="buyPlan(2000, 900)">Buy Gold Plan</button>
+</div><div class="section">
     <h3>Your Referral Link:</h3>
     <p id="referralLink">---</p>
-    <button onclick="copyReferral()">Copy Referral Link</button>
-</div></div><footer>
-    &copy; 2025 Pak Oil. All rights reserved.
-</footer><script>
+    <button class="btn" onclick="copyReferral()">Copy Referral Link</button>
+</div><footer>
+    <p>&copy; 2025 Pak Oil. All rights reserved.</p>
+</footer><!-- Deposit & Withdraw Screens --><div id="popup" style="display:none;">
+    <div class="section">
+        <h2 id="popupTitle">Deposit</h2>
+        <div id="popupContent"></div>
+        <button class="btn" onclick="closePopup()">Close</button>
+    </div>
+</div><script>
 let balance = 0;
 let dailyProfit = 0;
-const purchasedPlans = { basic: false, silver: false, gold: false };
+let profitTimer = null;
 
-document.addEventListener("DOMContentLoaded", () => {
+// Referral Link generate
+window.onload = function() {
     const user = prompt("Enter your username:");
-    document.getElementById('referralLink').innerText = window.location.origin + '/register.html?ref=' + user;
-    startProfit();
-});
+    document.getElementById('referralLink').innerText = window.location.href + "?ref=" + user;
+    updateDashboard();
+};
 
-function applyCode() {
-    const code = document.getElementById('promoCode').value;
-    if (code === "0987") {
-        balance += 500;
-    } else if (code === "7890") {
-        balance += 1000;
-    } else if (code === "9870") {
-        balance += 2000;
+function buyPlan(amount, profit) {
+    if (balance >= amount) {
+        balance -= amount;
+        dailyProfit += profit;
+        startProfit();
+        updateDashboard();
+        alert("Plan Activated!");
     } else {
-        alert("Invalid Code");
-        return;
+        alert("Insufficient balance!");
     }
-    updateDashboard();
-    alert("Balance added successfully!");
-}
-
-function buyPlan(plan, amount, profit) {
-    if (purchasedPlans[plan]) return;
-    if (balance < amount) {
-        alert("Insufficient Balance");
-        return;
-    }
-    balance -= amount;
-    dailyProfit += profit;
-    purchasedPlans[plan] = true;
-    document.getElementById(plan + 'Btn').innerText = 'Active ✅';
-    document.getElementById(plan + 'Btn').disabled = true;
-    updateDashboard();
 }
 
 function updateDashboard() {
@@ -103,15 +77,41 @@ function updateDashboard() {
 }
 
 function startProfit() {
-    setInterval(() => {
-        balance += dailyProfit;
-        updateDashboard();
-    }, 5000);
+    if (profitTimer) return; // prevent multiple intervals
+
+    profitTimer = setInterval(() => {
+        if (dailyProfit > 0) {
+            balance += dailyProfit;
+            updateDashboard();
+        }
+    }, 86400000); // Every 24 hours
+}
+
+function showDeposit() {
+    document.getElementById('popupTitle').innerText = "Deposit";
+    document.getElementById('popupContent').innerHTML = `
+        <p>Easypaisa: 0331-9535871</p>
+        <p>JazzCash: 0331-9535871</p>
+        <p>Note: Send payment screenshot to WhatsApp 0316-5355105 after deposit.</p>
+    `;
+    document.getElementById('popup').style.display = 'block';
+}
+
+function showWithdraw() {
+    document.getElementById('popupTitle').innerText = "Withdraw";
+    document.getElementById('popupContent').innerHTML = `
+        <p>Note: Minimum Withdraw is 400 PKR.</p>
+        <p>Send "Withdraw" message on WhatsApp 0316-5355105 to withdraw your balance.</p>
+    `;
+    document.getElementById('popup').style.display = 'block';
+}
+
+function closePopup() {
+    document.getElementById('popup').style.display = 'none';
 }
 
 function copyReferral() {
-    const link = document.getElementById('referralLink').innerText;
-    navigator.clipboard.writeText(link);
+    navigator.clipboard.writeText(document.getElementById('referralLink').innerText);
     alert("Referral link copied!");
 }
 </script></body>
