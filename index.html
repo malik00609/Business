@@ -1,67 +1,100 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>My Business</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
-    }
-
-    header {
-      background: #333;
-      color: white;
-      padding: 20px 0;
-      text-align: center;
-    }
-
-    nav a {
-      margin: 0 15px;
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    section {
-      padding: 60px 20px;
-      text-align: center;
-    }
-
-    footer {
-      background: #333;
-      color: white;
-      text-align: center;
-      padding: 10px 0;
-    }
-
-    h1, h2 {
-      color: #333;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pak Oil - Investment Site</title>
+    <style>
+        body {font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0;}
+        header, footer {background-color: #333; color: #fff; text-align: center; padding: 20px;}
+        .container {padding: 20px; max-width: 900px; margin: auto;}
+        .plan, .form, .dashboard, .deposit, .withdraw {background-color: #fff; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);}
+        button {padding: 10px 20px; background-color: #28a745; color: #fff; border: none; border-radius: 4px; cursor: pointer;}
+        button:hover {background-color: #218838;}
+        input {padding: 10px; width: 100%; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px;}
+        a {color: #28a745; text-decoration: none;}
+    </style>
 </head>
-<body>
-
-  <header>
-    <h1>Welcome to My Business</h1>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="about.html">About</a>
-      <a href="services.html">Services</a>
-      <a href="contact.html">Contact</a>
-    </nav>
-  </header>
-
-  <section>
-    <h2>Home</h2>
-    <p>We provide top-class solutions to boost your business.</p>
-  </section>
-
-  <footer>
-    <p>© 2025 My Business. All rights reserved.</p>
-  </footer>
-
-</body>
+<body><header>
+    <h1>Pak Oil Investment</h1>
+</header><div class="container" id="content"><!-- Home Page --><div id="home">
+    <h2>Choose Your Investment Plan</h2>
+    <div class="plan">
+        <h2>Basic Plan</h2>
+        <p>Invest: 500 PKR</p>
+        <p>Daily Profit: 220 PKR</p>
+        <p>Duration: 10 Days</p>
+        <button onclick="showPage('basic')">View Plan</button>
+    </div>
+    <div class="plan">
+        <h2>Silver Plan</h2>
+        <p>Invest: 1000 PKR</p>
+        <p>Daily Profit: 450 PKR</p>
+        <p>Duration: 10 Days</p>
+        <button onclick="showPage('silver')">View Plan</button>
+    </div>
+    <div class="plan">
+        <h2>Gold Plan</h2>
+        <p>Invest: 2000 PKR</p>
+        <p>Daily Profit: 900 PKR</p>
+        <p>Duration: 10 Days</p>
+        <button onclick="showPage('gold')">View Plan</button>
+    </div>
+    <br><button onclick="showPage('register')">Register</button>
+    <button onclick="showPage('login')">Login</button>
+</div><!-- Register Page --><div id="register" style="display:none;" class="form">
+    <h2>Register</h2>
+    <input type="text" placeholder="Username">
+    <input type="password" placeholder="Password">
+    <button onclick="showPage('dashboard')">Register</button>
+</div><!-- Login Page --><div id="login" style="display:none;" class="form">
+    <h2>Login</h2>
+    <input type="text" placeholder="Username">
+    <input type="password" placeholder="Password">
+    <button onclick="showPage('dashboard')">Login</button>
+</div><!-- Dashboard --><div id="dashboard" style="display:none;" class="dashboard">
+    <h2>Dashboard</h2>
+    <p>Your Investments and Daily Profits will appear here.</p>
+    <button onclick="showPage('deposit')">Deposit</button>
+    <button onclick="showPage('withdraw')">Withdraw</button>
+    <button onclick="showPage('home')">Logout</button>
+</div><!-- Basic Plan --><div id="basic" style="display:none;" class="plan">
+    <h2>Basic Plan</h2>
+    <p>Invest: 500 PKR</p>
+    <p>Daily Profit: 220 PKR</p>
+    <p>Duration: 10 Days</p>
+    <button onclick="showPage('deposit')">Deposit</button>
+    <button onclick="showPage('withdraw')">Withdraw</button>
+</div><!-- Silver Plan --><div id="silver" style="display:none;" class="plan">
+    <h2>Silver Plan</h2>
+    <p>Invest: 1000 PKR</p>
+    <p>Daily Profit: 450 PKR</p>
+    <p>Duration: 10 Days</p>
+    <button onclick="showPage('deposit')">Deposit</button>
+    <button onclick="showPage('withdraw')">Withdraw</button>
+</div><!-- Gold Plan --><div id="gold" style="display:none;" class="plan">
+    <h2>Gold Plan</h2>
+    <p>Invest: 2000 PKR</p>
+    <p>Daily Profit: 900 PKR</p>
+    <p>Duration: 10 Days</p>
+    <button onclick="showPage('deposit')">Deposit</button>
+    <button onclick="showPage('withdraw')">Withdraw</button>
+</div><!-- Deposit Page --><div id="deposit" style="display:none;" class="deposit">
+    <h2>Deposit</h2>
+    <p>WhatsApp: 0316-5355105</p>
+    <p>Easypaisa: 0331-9535871</p>
+    <p>JazzCash: 0331-9535871</p>
+    <button onclick="showPage('dashboard')">Back to Dashboard</button>
+</div><!-- Withdraw Page --><div id="withdraw" style="display:none;" class="withdraw">
+    <h2>Withdraw</h2>
+    <p>Contact Admin on WhatsApp: 0316-5355105</p>
+    <button onclick="showPage('dashboard')">Back to Dashboard</button>
+</div></div><footer>
+    &copy; 2025 Pak Oil. All rights reserved.
+</footer><script>
+function showPage(pageId) {
+    const pages = ['home', 'register', 'login', 'dashboard', 'basic', 'silver', 'gold', 'deposit', 'withdraw'];
+    pages.forEach(id => document.getElementById(id).style.display = 'none');
+    document.getElementById(pageId).style.display = 'block';
+}
+</script></body>
 </html>
