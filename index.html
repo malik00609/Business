@@ -2,58 +2,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pak Oil - Investment Dashboard</title>
+    <title>Pak Oil Investment</title>
     <style>
         body {font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0;}
         header, footer {background-color: #333; color: #fff; text-align: center; padding: 20px;}
-        .container {padding: 20px; max-width: 900px; margin: auto;}
+        .container {padding: 20px; max-width: 1000px; margin: auto;}
         .section {background-color: #fff; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);}
-        button {padding: 10px 20px; background-color: #28a745; color: #fff; border: none; border-radius: 4px; cursor: pointer;}
-        button:disabled {background-color: #ccc; cursor: not-allowed;}
-        button:hover:not(:disabled) {background-color: #218838;}
+        .plan {padding: 20px; margin-bottom: 20px; border-radius: 8px; color: #fff;}
+        .basic {background-color: #28a745;}
+        .silver {background-color: #007bff;}
+        .gold {background-color: #fd7e14;}
+        .referral {background-color: #6f42c1; text-align: center; padding: 15px;}
+        .actions {display: flex; justify-content: space-around; margin-bottom: 20px;}
+        .deposit {background-color: #28a745; padding: 15px; border-radius: 8px; color: #fff;}
+        .withdraw {background-color: #dc3545; padding: 15px; border-radius: 8px; color: #fff;}
+        button {padding: 10px 20px; margin-top: 10px; border: none; border-radius: 4px; cursor: pointer; background-color: #fff; color: #000;}
         input {padding: 10px; width: 100%; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px;}
-        .nav {margin-bottom: 20px;}
-        .nav button {margin-right: 10px;}
-        .balance, .profit, .referral {font-size: 18px; margin-bottom: 10px;}
+        .balance, .profit {font-size: 18px; margin-bottom: 10px;}
     </style>
 </head>
 <body><header>
     <h1>Pak Oil Investment</h1>
-</header><div class="container"><div id="register" class="section">
-    <h2>Register</h2>
-    <input type="text" id="username" placeholder="Username">
-    <input type="password" id="password" placeholder="Password">
-    <button onclick="registerUser()">Register</button>
-</div><div id="dashboard" class="section" style="display:none;">
-    <div class="nav">
-        <button onclick="showSection('deposit')">Deposit</button>
-        <button onclick="showSection('withdraw')">Withdraw</button>
-        <button onclick="showSection('contact')">Contact</button>
-        <button onclick="logout()">Logout</button>
+</header><div class="container"><div class="balance">💰 Balance: <span id="balance">0</span> PKR</div>
+<div class="profit">📈 Daily Profit: <span id="profit">0</span> PKR</div><div class="actions">
+    <div class="deposit">
+        <h3>Deposit</h3>
+        <input type="text" id="promoCode" placeholder="Enter Code">
+        <button onclick="applyCode()">Apply Code</button>
     </div>
-    <div class="balance">💰 Balance: <span id="balance">0</span> PKR</div>
-    <div class="profit">📈 Daily Profit: <span id="profit">0</span> PKR</div>
-    <div class="referral">🔗 Referral Link: <span id="referralLink">---</span></div>
-    <div class="nav">
-        <button id="basicBtn" onclick="buyPlan('basic', 500, 220)">Buy Basic Plan (500)</button>
-        <button id="silverBtn" onclick="buyPlan('silver', 1000, 450)">Buy Silver Plan (1000)</button>
-        <button id="goldBtn" onclick="buyPlan('gold', 2000, 900)">Buy Gold Plan (2000)</button>
+    <div class="withdraw">
+        <h3>Withdraw</h3>
+        <p>Contact Admin on WhatsApp to withdraw your funds.</p>
+        <p>WhatsApp: 0316-5355105</p>
     </div>
-</div><div id="deposit" class="section" style="display:none;">
-    <h2>Deposit</h2>
-    <input type="text" id="promoCode" placeholder="Enter Code">
-    <button onclick="applyCode()">Apply Code</button>
-    <p>Easypaisa: 0331-9535871</p>
-    <p>JazzCash: 0331-9535871</p>
-    <button onclick="showSection('dashboard')">Back</button>
-</div><div id="withdraw" class="section" style="display:none;">
-    <h2>Withdraw</h2>
-    <p>Contact Admin on WhatsApp to withdraw your funds.</p>
-    <button onclick="showSection('dashboard')">Back</button>
-</div><div id="contact" class="section" style="display:none;">
-    <h2>Contact</h2>
-    <p>WhatsApp: 0316-5355105</p>
-    <button onclick="showSection('dashboard')">Back</button>
+</div><div class="plan basic">
+    <h3>Basic Plan (500 PKR)</h3>
+    <p>Daily Profit: 220 PKR</p>
+    <p>Total in 10 Days: 2200 PKR</p>
+    <button id="basicBtn" onclick="buyPlan('basic', 500, 220)">Buy Basic Plan</button>
+</div><div class="plan silver">
+    <h3>Silver Plan (1000 PKR)</h3>
+    <p>Daily Profit: 450 PKR</p>
+    <p>Total in 10 Days: 4500 PKR</p>
+    <button id="silverBtn" onclick="buyPlan('silver', 1000, 450)">Buy Silver Plan</button>
+</div><div class="plan gold">
+    <h3>Gold Plan (2000 PKR)</h3>
+    <p>Daily Profit: 900 PKR</p>
+    <p>Total in 10 Days: 9000 PKR</p>
+    <button id="goldBtn" onclick="buyPlan('gold', 2000, 900)">Buy Gold Plan</button>
+</div><div class="referral">
+    <h3>Your Referral Link:</h3>
+    <p id="referralLink">---</p>
+    <button onclick="copyReferral()">Copy Referral Link</button>
 </div></div><footer>
     &copy; 2025 Pak Oil. All rights reserved.
 </footer><script>
@@ -61,27 +61,11 @@ let balance = 0;
 let dailyProfit = 0;
 const purchasedPlans = { basic: false, silver: false, gold: false };
 
-function registerUser() {
-    const user = document.getElementById('username').value;
-    const pass = document.getElementById('password').value;
-    if (user && pass) {
-        localStorage.setItem('pakOilUser', user);
-        document.getElementById('referralLink').innerText = window.location.origin + '/register.html?ref=' + user;
-        document.getElementById('register').style.display = 'none';
-        document.getElementById('dashboard').style.display = 'block';
-        startProfit();
-    } else {
-        alert("Please enter username and password.");
-    }
-}
-
-function showSection(section) {
-    document.getElementById('dashboard').style.display = 'none';
-    document.getElementById('deposit').style.display = 'none';
-    document.getElementById('withdraw').style.display = 'none';
-    document.getElementById('contact').style.display = 'none';
-    document.getElementById(section).style.display = 'block';
-}
+document.addEventListener("DOMContentLoaded", () => {
+    const user = prompt("Enter your username:");
+    document.getElementById('referralLink').innerText = window.location.origin + '/register.html?ref=' + user;
+    startProfit();
+});
 
 function applyCode() {
     const code = document.getElementById('promoCode').value;
@@ -101,7 +85,11 @@ function applyCode() {
 
 function buyPlan(plan, amount, profit) {
     if (purchasedPlans[plan]) return;
-    balance += amount;
+    if (balance < amount) {
+        alert("Insufficient Balance");
+        return;
+    }
+    balance -= amount;
     dailyProfit += profit;
     purchasedPlans[plan] = true;
     document.getElementById(plan + 'Btn').innerText = 'Active ✅';
@@ -121,12 +109,10 @@ function startProfit() {
     }, 5000);
 }
 
-function logout() {
-    localStorage.removeItem('pakOilUser');
-    balance = 0;
-    dailyProfit = 0;
-    document.getElementById('dashboard').style.display = 'none';
-    document.getElementById('register').style.display = 'block';
+function copyReferral() {
+    const link = document.getElementById('referralLink').innerText;
+    navigator.clipboard.writeText(link);
+    alert("Referral link copied!");
 }
 </script></body>
 </html>
