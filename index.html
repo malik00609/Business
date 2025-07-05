@@ -9,7 +9,8 @@
         .container {padding: 20px; max-width: 900px; margin: auto;}
         .section {background-color: #fff; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);}
         button {padding: 10px 20px; background-color: #28a745; color: #fff; border: none; border-radius: 4px; cursor: pointer;}
-        button:hover {background-color: #218838;}
+        button:disabled {background-color: #ccc; cursor: not-allowed;}
+        button:hover:not(:disabled) {background-color: #218838;}
         input {padding: 10px; width: 100%; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px;}
         .nav {margin-bottom: 20px;}
         .nav button {margin-right: 10px;}
@@ -34,12 +35,14 @@
     <div class="profit">📈 Daily Profit: <span id="profit">0</span> PKR</div>
     <div class="referral">🔗 Referral Link: <span id="referralLink">---</span></div>
     <div class="nav">
-        <button onclick="buyPlan(500, 220)">Buy Basic Plan (500)</button>
-        <button onclick="buyPlan(1000, 450)">Buy Silver Plan (1000)</button>
-        <button onclick="buyPlan(2000, 900)">Buy Gold Plan (2000)</button>
+        <button id="basicBtn" onclick="buyPlan('basic', 500, 220)">Buy Basic Plan (500)</button>
+        <button id="silverBtn" onclick="buyPlan('silver', 1000, 450)">Buy Silver Plan (1000)</button>
+        <button id="goldBtn" onclick="buyPlan('gold', 2000, 900)">Buy Gold Plan (2000)</button>
     </div>
 </div><div id="deposit" class="section" style="display:none;">
     <h2>Deposit</h2>
+    <input type="text" id="promoCode" placeholder="Enter Code">
+    <button onclick="applyCode()">Apply Code</button>
     <p>Easypaisa: 0331-9535871</p>
     <p>JazzCash: 0331-9535871</p>
     <button onclick="showSection('dashboard')">Back</button>
@@ -56,6 +59,7 @@
 </footer><script>
 let balance = 0;
 let dailyProfit = 0;
+const purchasedPlans = { basic: false, silver: false, gold: false };
 
 function registerUser() {
     const user = document.getElementById('username').value;
@@ -79,9 +83,29 @@ function showSection(section) {
     document.getElementById(section).style.display = 'block';
 }
 
-function buyPlan(amount, profit) {
+function applyCode() {
+    const code = document.getElementById('promoCode').value;
+    if (code === "0987") {
+        balance += 500;
+    } else if (code === "7890") {
+        balance += 1000;
+    } else if (code === "9870") {
+        balance += 2000;
+    } else {
+        alert("Invalid Code");
+        return;
+    }
+    updateDashboard();
+    alert("Balance added successfully!");
+}
+
+function buyPlan(plan, amount, profit) {
+    if (purchasedPlans[plan]) return;
     balance += amount;
     dailyProfit += profit;
+    purchasedPlans[plan] = true;
+    document.getElementById(plan + 'Btn').innerText = 'Active ✅';
+    document.getElementById(plan + 'Btn').disabled = true;
     updateDashboard();
 }
 
